@@ -1,0 +1,27 @@
+import os
+import openai
+
+client = openai.OpenAI(
+    base_url="https://llama3-405b-hackathon.lepton.run/api/v1/",
+    # Get your token from lepton.ai under Settings -> Tokens -> Workspace Token
+    api_key="pfIZAOojZq0ahfIEywroVuIeah4SGWZp" 
+)
+# user input text
+user_input = input("Enter some text: ")
+
+completion = client.chat.completions.create(
+    model="llama3-405b",
+    messages=[
+        {"role": "user", "content": user_input},
+
+    ],
+    max_tokens=128,
+    stream=True,
+)
+
+for chunk in completion:
+    if not chunk.choices:
+        continue
+    content = chunk.choices[0].delta.content
+    if content:
+        print(content, end="")
